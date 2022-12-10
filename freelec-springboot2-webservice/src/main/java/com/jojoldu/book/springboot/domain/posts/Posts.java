@@ -33,13 +33,23 @@ public class Posts extends BaseTimeEntity{
     @OneToMany(mappedBy = "posts", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @OrderBy("id asc") // 댓글 정렬
     private List<Comment> comments;
+    @Column
+    private Long fileId;
 
     @Builder
-    public Posts(String title, String content,String author) {
+    public Posts(Long id, String title, String content, String author, Long fileId) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.author = author;
+        this.fileId = fileId;
     }
+//    @Builder
+//    public Posts(String title, String content,String author) {
+//        this.title = title;
+//        this.content = content;
+//        this.author = author;
+//    }
 
     public void update(String title, String content) {
         this.title = title;

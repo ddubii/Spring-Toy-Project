@@ -33,15 +33,6 @@ public class PostsService {
     }
 
     @Transactional
-    public Long updateView (Long id, PostsUpdateRequestDto requestDto) {
-        Posts posts = postsRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-        posts.update(requestDto.getTitle(), requestDto.getContent());
-
-        return id;
-    }
-
-    @Transactional
     public void delete (Long id) {
         Posts posts = postsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
@@ -62,4 +53,21 @@ public class PostsService {
                 .map(PostsListResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    //게시글 조회
+    @Transactional
+    public PostsSaveRequestDto getPost(Long id) {
+        Posts posts = postsRepository.findById(id).get();
+
+        PostsSaveRequestDto postsSaveRequestDto = PostsSaveRequestDto.builder()
+                .id(posts.getId())
+                .author(posts.getAuthor())
+                .title(posts.getTitle())
+                .content(posts.getContent())
+                .fileId(posts.getFileId())
+                .build();
+
+        return postsSaveRequestDto;
+    }
+
 }

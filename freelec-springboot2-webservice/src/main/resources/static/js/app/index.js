@@ -21,18 +21,52 @@ var main = {
             _this.commentDel();
         });
     },
+    // save : function () {
+    //     var data = {
+    //         title: $('#title').val(),
+    //         author: $('#author').val(),
+    //         content: $('#content').val()
+    //     };
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: '/api/v1/posts',
+    //         dataType: 'json',
+    //         contentType:'application/json; charset=utf-8',
+    //         data: JSON.stringify(data)
+    //     }).done(function() {
+    //         alert('글이 등록되었습니다.');
+    //         window.location.href = '/';
+    //     }).fail(function (error) {
+    //         alert(JSON.stringify(error));
+    //     });
+    // },
     save : function () {
         var data = {
             title: $('#title').val(),
             author: $('#author').val(),
-            content: $('#content').val()
+            content: $('#content').val(),
         };
+        var formData = new FormData();
+        var bfile = $('#bfile')[0].files[0];
+
+
+        formData.append('title', data.title);
+        formData.append('author', data.author);
+        formData.append('content', data.content);
+        formData.append('bfile', bfile);
+
         $.ajax({
             type: 'POST',
+            enctype: 'multipart/form-data', //multi 데이터 처리
             url: '/api/v1/posts',
-            dataType: 'json',
-            contentType:'application/json; charset=utf-8',
-            data: JSON.stringify(data)
+            //dataType: 'json', //
+            //contentType:'application/json; charset=utf-8',
+            //data: JSON.stringify(data)
+            processData: false,
+            contentType: false,
+            data: formData,
+            dataType: 'json'
+
         }).done(function() {
             alert('글이 등록되었습니다.');
             window.location.href = '/';
@@ -40,6 +74,7 @@ var main = {
             alert(JSON.stringify(error));
         });
     },
+
     update : function () {
         var data = {
             title: $('#title').val(),
